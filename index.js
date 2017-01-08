@@ -14,5 +14,26 @@ function populateVoices() {
 		.join('');
 }
 
+function setVoice() {
+	msg.voice = voices.find(voice => voice.name === this.value);
+}
+
+function toggle(startOver = true) {
+	// stop current speaking
+	speechSynthesis.cancel();
+	if (startOver) {
+		speechSynthesis.speak(msg);
+	}
+}
+
+function setOption() {
+	msg[this.name] = this.value;
+	toggle();
+}
+
 // global browser var (speechSynthesis)
 speechSynthesis.addEventListener('voiceschanged', populateVoices);
+voicesDropdown.addEventListener('change', setVoice);
+options.forEach(option => option.addEventListener('change', setOption));
+speakButton.addEventListener('click', toggle);
+stopButton.addEventListener('click', toggle.bind(null, false));
